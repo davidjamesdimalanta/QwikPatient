@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Assignment {
+  id        String  @id @default(uuid())
+  nurseId   String
+  patientId String
+  nurse     Nurse   @relation(fields: [nurseId], references: [id])
+  patient   Patient @relation(fields: [patientId], references: [id])
+}
+
+model Visit {
+  id               String   @id @default(uuid())
+  nurseId          String
+  patientId        String
+  date             DateTime
+  confirmedByAdmin Boolean  @default(false)
+  confirmedByNurse Boolean  @default(false)
+  nurse            Nurse    @relation(fields: [nurseId], references: [id])
+  patient          Patient  @relation(fields: [patientId], references: [id])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("nurse")
+  sessions      Session[]
+  accounts      Account[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Nurse {
+  id          String      @id @default(uuid())
+  name        String
+  address     String
+  phone       String
+  assignments Assignment[]
+  visits      Visit[]
+  tasks       Task[]
+  schedules   Schedule[]
+}
+
+model Patient {
+  id          String       @id @default(uuid())
+  first_name  String
+  last_name   String
+  address     String
+  phone       String
+  assignments Assignment[]
+  visits      Visit[]
+  tasks       Task[]
+  schedules   Schedule[]
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  nurseId   String
+  patientId String
+  nurse     Nurse    @relation(fields: [nurseId], references: [id])
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  // Add other task fields as needed, such as:
+  // title     String
+  // status    String
+  // dueDate   DateTime
+}
+
+model Schedule {
+  id        String   @id @default(uuid())
+  nurseId   String
+  patientId String
+  date      DateTime
+  status    String   // 'pending' or 'confirmed'
+  nurse     Nurse    @relation(fields: [nurseId], references: [id])
+  patient   Patient  @relation(fields: [patientId], references: [id])
+}

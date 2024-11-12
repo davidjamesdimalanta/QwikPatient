@@ -12,6 +12,10 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        museomoderno: ['MuseoModerno', 'sans-serif'],
+        satoshi: ['Satoshi', 'sans-serif'],
+      },
     },
   },
   plugins: [],
