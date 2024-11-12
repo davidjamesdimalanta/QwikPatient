@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { getUsers, deleteUser, updateUser, User } from '@/app/services/userService';
 import AdminPanel from '@/app/components/admin/AdminPanel';
