@@ -24,7 +24,11 @@ export interface Visit {
 
 export interface JWTPayload {
   id: string;
-  role: string;
+  email: string;
+  name?: string;
+  role?: string;
+  iat: number;
+  exp?: number;
 }
 
 declare module 'next-auth' {

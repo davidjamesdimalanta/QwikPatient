@@ -1,20 +1,14 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React from 'react';
+import DeleteNurseForm from '@/app/components/admin/DeleteNurseForm'
 
-export default function DeleteNursePage({ params }: { params: { id: string } }) {
-  const router = useRouter();
+type Props = {
+  params: {
+    id: string;
+  };
+};
 
-  useEffect(() => {
-    async function deleteNurse() {
-      await fetch(`/api/nurses/${params.id}`, {
-        method: 'DELETE',
-      });
-      router.push('/admin/nurses');
-    }
-    deleteNurse();
-  }, [params.id, router]);
-
-  return <div>Deleting nurse...</div>;
+export default function DeleteNursePage({ params }: Props) {
+  return <DeleteNurseForm nurseId={params.id} />;
 }
