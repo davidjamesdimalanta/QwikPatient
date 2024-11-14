@@ -3,9 +3,9 @@ import prisma from '@/app/lib/db';
 import { notFound } from 'next/navigation';
 import { Nurse } from '@/types/next-auth';
 
-export default async function EditNursePage({ params }: { params: { id: string } }) {
+export default async function EditNursePage({ nurseId }: { nurseId: string }) {
   const nurse = await prisma.nurse.findUnique({ 
-    where: { id: params.id }
+    where: { id: nurseId }
   });
 
   if (!nurse) {
