@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { getNurseIdFromToken } from '@/lib/auth';
+import { getNurseIdFromToken } from '@/app/lib/auth';
 
-export async function GET(request: Request) {
-  const nurseId = getNurseIdFromToken(request);
+export async function GET(request: NextRequest) {
+  const nurseId = await getNurseIdFromToken(request);
 
   if (!nurseId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
   const patients = await prisma.patient.findMany({
     where: {
-      Assignment: {
+      assignments: {
         some: { nurseId },
       },
     },
