@@ -1,5 +1,5 @@
 import NurseForm from '@/app/components/admin/NurseForm';
-import prisma from '@/lib/db';
+import prisma from '@/app/lib/db';
 import { notFound } from 'next/navigation';
 import { Nurse } from '@/types/next-auth';
 

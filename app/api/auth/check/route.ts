@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
-import prisma from '@/lib/db';
+import { verifyToken } from '@/app/lib/auth';
+import prisma from '@/app/lib/db';
 import { JWTPayload } from '@/types/next-auth';
 
 export async function GET(request: NextRequest) {
