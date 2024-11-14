@@ -1,11 +1,5 @@
 import DeleteNurseForm from '@/app/components/admin/DeleteNurseForm'
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-export default function DeleteNursePage({ params }: Props) {
+export default function DeleteNursePage({ params }: { params: { id: string } }) {
   return <DeleteNurseForm nurseId={params.id} />;
 }
