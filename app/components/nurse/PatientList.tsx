@@ -6,7 +6,8 @@ import Link from 'next/link';
 
 interface Patient {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   address: string;
   phone: string;
 }
@@ -42,7 +43,7 @@ export default function PatientList() {
         <tbody>
           {patients.map((patient) => (
             <tr key={patient.id}>
-              <td className="py-2 px-4 border-b">{patient.name}</td>
+              <td className="py-2 px-4 border-b">{`${patient.first_name} ${patient.last_name}`}</td>
               <td className="py-2 px-4 border-b">{patient.address}</td>
               <td className="py-2 px-4 border-b">{patient.phone}</td>
               <td className="py-2 px-4 border-b">

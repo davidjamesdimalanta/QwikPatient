@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function PatientForm() {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
 
@@ -16,7 +17,10 @@ export default function PatientForm() {
 
     await fetch('/api/patients', {
       method: 'POST',
-      body: JSON.stringify({ name, address, phone }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ first_name: firstName, last_name: lastName, address, phone }),
     });
 
     router.push('/admin/patients');
@@ -25,12 +29,22 @@ export default function PatientForm() {
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label className="block">Name</label>
+        <label className="block">First Name</label>
         <input
           type="text"
           className="w-full p-2 border rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block">Last Name</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
           required
         />
       </div>

@@ -9,7 +9,8 @@ interface Nurse {
 
 interface Patient {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
 }
 
 export default function AssignPatients() {
@@ -64,6 +65,7 @@ export default function AssignPatients() {
         <div className="border rounded p-2 max-h-64 overflow-y-scroll">
           {patients.map((patient) => (
             <div key={patient.id}>
+              <p>{`${patient.first_name} ${patient.last_name}`}</p>
               <input
                 type="checkbox"
                 id={`patient-${patient.id}`}
@@ -75,7 +77,7 @@ export default function AssignPatients() {
                   );
                 }}
               />
-              <label htmlFor={`patient-${patient.id}`}>{patient.name}</label>
+              <label htmlFor={`patient-${patient.id}`}>{`${patient.first_name} ${patient.last_name}`}</label>
             </div>
           ))}
         </div>

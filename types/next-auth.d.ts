@@ -9,17 +9,50 @@ export interface Nurse {
 
 export interface Patient {
   id: string;
-  name: string;
-  address: string;
-  phone: string;
   first_name: string;
   last_name: string;
+  address: string;
+  phone: string;
 }
 
 export interface Visit {
   id: string;
   patientName: string;
   date: Date;
+}
+
+export interface User {
+  id: string;
+  name?: string;
+  email?: string;
+  role: string;
+}
+
+export interface Assignment {
+  id: string;
+  nurseId: string;
+  patientId: string;
+  nurse?: Nurse;
+  patient?: Patient;
+}
+
+export interface Task {
+  id: string;
+  nurseId: string;
+  patientId: string;
+  title?: string;
+  status?: string;
+  dueDate?: Date;
+}
+
+export interface Schedule {
+  id: string;
+  nurseId: string;
+  patientId: string;
+  date: Date;
+  status: 'pending' | 'confirmed';
+  nurse?: Nurse;
+  patient?: Patient;
 }
 
 export interface JWTPayload {

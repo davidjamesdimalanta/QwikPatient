@@ -5,7 +5,10 @@ import { useEffect, useState } from 'react';
 
 interface Patient {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
+  address: string;
+  phone: string;
 }
 
 export default function Schedule() {
@@ -42,7 +45,7 @@ export default function Schedule() {
           <option value="">Select a patient</option>
           {patients.map((patient) => (
             <option key={patient.id} value={patient.id}>
-              {patient.name}
+              {patient.first_name} {patient.last_name}
             </option>
           ))}
         </select>

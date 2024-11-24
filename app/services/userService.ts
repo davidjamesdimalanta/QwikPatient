@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export interface User {
   id: string;
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   role: string;
 }
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 interface Visit {
   id: string;
   patientName: string;
-  date: string;
+  date: Date;
 }
 
 export default function ConfirmVisit() {
@@ -24,6 +24,9 @@ export default function ConfirmVisit() {
   const handleConfirm = async (visitId: string) => {
     await fetch(`/api/visits/${visitId}`, {
       method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ confirmedByNurse: true }),
     });
     setVisits((prev) => prev.filter((visit) => visit.id !== visitId));

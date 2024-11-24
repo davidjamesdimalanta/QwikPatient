@@ -7,9 +7,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { name, address, phone } = await request.json();
+  const { first_name, last_name, address, phone } = await request.json();
   const patient = await prisma.patient.create({
-    data: { name, address, phone },
+    data: { first_name, last_name, address, phone },
   });
   return NextResponse.json(patient);
 }
