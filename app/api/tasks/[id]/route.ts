@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/db';
-import { Task } from '@/types/next-auth';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   const { title, status, dueDate, nurseId, patientId } = await request.json();
@@ -11,7 +10,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       data: {
         title,
         status,
-        dueDate: dueDate ? new Date(dueDate) : null,
+        dueDate: dueDate ? new Date(dueDate) : new Date(),
         nurseId,
         patientId,
       },

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/db';
-import { Schedule } from '@/types/next-auth';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   const { nurseId, patientId, date, status } = await request.json();

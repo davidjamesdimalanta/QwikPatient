@@ -108,10 +108,9 @@ model Task {
   patientId String
   nurse     Nurse    @relation(fields: [nurseId], references: [id])
   patient   Patient  @relation(fields: [patientId], references: [id])
-  // Add other task fields as needed, such as:
-  // title     String
-  // status    String
-  // dueDate   DateTime
+  title     String
+  status    String
+  dueDate   DateTime
 }
 
 model Schedule {

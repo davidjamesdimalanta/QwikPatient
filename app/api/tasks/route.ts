@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/db';
-import { Task } from '@/types/next-auth';
 
 export async function GET() {
   const tasks = await prisma.task.findMany({
@@ -13,21 +12,38 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const { title, status, dueDate, nurseId, patientId } = await request.json();
+  try {
+    const { title, status, dueDate, nurseId, patientId } = await request.json();
 
-  const newTask = await prisma.task.create({
-    data: {
-      title,
-      status,
-      dueDate: dueDate ? new Date(dueDate) : null,
-      nurseId,
-      patientId,
-    },
-    include: {
-      nurse: true,
-      patient: true,
-    },
-  });
+    // Validate Nurse
+    const nurse = await prisma.nurse.findUnique({ where: { id: nurseId } });
+    if (!nurse) {
+      return NextResponse.json({ error: 'Invalid nurseId' }, { status: 400 });
+    }
 
-  return NextResponse.json(newTask);
+    // Validate Patient
+    const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+    if (!patient) {
+      return NextResponse.json({ error: 'Invalid patientId' }, { status: 400 });
+    }
+
+    const newTask = await prisma.task.create({
+      data: {
+        title,
+        status,
+        dueDate: dueDate ? new Date(dueDate) : new Date(),
+        nurseId,
+        patientId,
+      },
+      include: {
+        nurse: true,
+        patient: true,
+      },
+    });
+
+    return NextResponse.json(newTask, { status: 201 });
+  } catch (error) {
+    console.error('Error creating task:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
 }
