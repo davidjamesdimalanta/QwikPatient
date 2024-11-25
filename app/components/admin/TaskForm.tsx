@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Task } from '@/types/next-auth';
@@ -24,15 +26,24 @@ export default function TaskForm({ task }: TaskFormProps) {
       dueDate: dueDate ? new Date(dueDate) : null,
     };
 
-    await fetch(task ? `/api/tasks/${task.id}` : '/api/tasks', {
-      method: task ? 'PUT' : 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch(task ? `/api/tasks/${task.id}` : '/api/tasks', {
+        method: task ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
-    router.push('/admin/tasks');
+      if (!res.ok) {
+        console.error('Failed to submit task form');
+        return;
+      }
+
+      router.push('/admin/tasks');
+    } catch (error) {
+      console.error('Error submitting task form:', error);
+    }
   };
 
   return (

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Schedule } from '@/types/next-auth';
@@ -8,6 +10,10 @@ export default function ScheduleList() {
   useEffect(() => {
     async function fetchSchedules() {
       const res = await fetch('/api/schedules');
+      if (!res.ok) {
+        console.error('Failed to fetch schedules');
+        return;
+      }
       const data = await res.json();
       setSchedules(data);
     }
@@ -18,11 +24,18 @@ export default function ScheduleList() {
     const confirmed = confirm('Are you sure you want to delete this schedule?');
     if (!confirmed) return;
 
-    await fetch(`/api/schedules/${scheduleId}`, {
-      method: 'DELETE',
-    });
-
-    setSchedules(prev => prev.filter(schedule => schedule.id !== scheduleId));
+    try {
+      const res = await fetch(`/api/schedules/${scheduleId}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        console.error('Failed to delete schedule');
+        return;
+      }
+      setSchedules(prev => prev.filter(schedule => schedule.id !== scheduleId));
+    } catch (error) {
+      console.error('Error deleting schedule:', error);
+    }
   };
 
   return (

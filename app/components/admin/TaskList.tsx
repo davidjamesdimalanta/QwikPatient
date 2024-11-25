@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Task } from '@/types/next-auth';
@@ -6,23 +8,34 @@ export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    async function fetchTasks() {
+    async function fetchSchedules() {
       const res = await fetch('/api/tasks');
+      if (!res.ok) {
+        console.error('Failed to fetch tasks');
+        return;
+      }
       const data = await res.json();
       setTasks(data);
     }
-    fetchTasks();
+    fetchSchedules();
   }, []);
 
   const handleDelete = async (taskId: string) => {
     const confirmed = confirm('Are you sure you want to delete this task?');
     if (!confirmed) return;
 
-    await fetch(`/api/tasks/${taskId}`, {
-      method: 'DELETE',
-    });
-
-    setTasks(prev => prev.filter(task => task.id !== taskId));
+    try {
+      const res = await fetch(`/api/tasks/${taskId}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        console.error('Failed to delete task');
+        return;
+      }
+      setTasks(prev => prev.filter(task => task.id !== taskId));
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
   return (

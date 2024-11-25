@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Nurse, Patient, Schedule } from '@/types/next-auth';
@@ -28,15 +30,24 @@ export default function ScheduleForm({ schedule, nurses, patients }: ScheduleFor
       status,
     };
 
-    await fetch(schedule ? `/api/schedules/${schedule.id}` : '/api/schedules', {
-      method: schedule ? 'PUT' : 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch(schedule ? `/api/schedules/${schedule.id}` : '/api/schedules', {
+        method: schedule ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
-    router.push('/admin/schedules');
+      if (!res.ok) {
+        console.error('Failed to submit schedule form');
+        return;
+      }
+
+      router.push('/admin/schedules');
+    } catch (error) {
+      console.error('Error submitting schedule form:', error);
+    }
   };
 
   return (
@@ -88,7 +99,7 @@ export default function ScheduleForm({ schedule, nurses, patients }: ScheduleFor
         <select
           className="w-full p-2 border rounded"
           value={status}
-          onChange={e => setStatus(e.target.value)}
+          onChange={e => setStatus(e.target.value as 'pending' | 'confirmed')}
           required
         >
           <option value="pending">Pending</option>
